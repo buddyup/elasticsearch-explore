@@ -84,3 +84,5 @@ Let's say we want to see instead of all events, just the buddy requests. I know 
 Coming to a future near you, build a dashboard in kibana.
 
 ![timelion.png](timelion.png)
+
+![account_signups.png](account_signups.png)
