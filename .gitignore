@@ -65,5 +65,10 @@ target/
 .virt
 
 *.sqlite3
+
+# Keep data private
 data/
 *.json
+
+
+.DS_Store

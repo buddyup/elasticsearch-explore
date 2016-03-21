@@ -27,3 +27,18 @@ Install marvel into Kibana
 
 If elasticsearch or kibana were running, restart them to see the installs. Preferably elasticsearch first. 
 
+
+## Configuration
+
+Outside of setting a unique `cluster.name` in the elasticsearch `config/elasticsearch.yml` file, kibana will need to know what index (think database) to look at. I'm prefixing all the indices with "buddyup" so the wild-card selector `buddyup*` will work fine here.
+
+![kibana index](kibana_index.png)
+
+
+## Getting to know the data
+
+I exported one class's data and imported it to the ES using a simple bulk create from python (see `write_feed` in [explore.py](explore.py). 
+
+Starting to do some quick visualizations from Kibana, I was able to see the most common meeting times for a study group.
+
+![study_group_start_time.png](study_group_start_time.png)
