@@ -38,7 +38,8 @@ Outside of setting a unique `cluster.name` in the elasticsearch `config/elastics
 
 Kibana will need to know what index (think database) to look at. I'm prefixing all the indices with "buddyup" so the wild-card selector `buddyup*` will work fine here. Events will be loaded into the index `buddyupevents` and we can load classes into another index `buddyupclasses`.
 
-![kibana index](kibana_index.png)
+
+![kibana_index](kibana_index.png)
 
 ### Configuring timelion
 
@@ -71,5 +72,15 @@ explore.write_feed(data=data, index='buddyupevents')
 ```
 
 ## Visualizing event data
+
+With Kibana, there are a number of options to visualize the data. To get started, we can head over to the `timelion` plugin. http://localhost:5601/app/timelion
+
+First, let's set an appropriate time period by clicking the clock in the top-right corner and set it to `Last 1 year`.  
+
+You'll notice you get a nice line chart, counting all events over time, and you'll see in the search bar `.es(*)` which is shorthand for search the default elasticsearch index (configured in timelion.json) for all documents. 
+
+Let's say we want to see instead of all events, just the buddy requests. I know that to be type `buddy_request` so we can change the search to `.es('type:buddy_request')`, hit enter and we're good to go! Repeat this step and we've got a dashboard. Zoom in to a couple different date ranges to see all the charts update.
+
+Coming to a future near you, build a dashboard in kibana.
 
 ![timelion.png](timelion.png)
