@@ -30,15 +30,46 @@ If elasticsearch or kibana were running, restart them to see the installs. Prefe
 
 ## Configuration
 
-Outside of setting a unique `cluster.name` in the elasticsearch `config/elasticsearch.yml` file, kibana will need to know what index (think database) to look at. I'm prefixing all the indices with "buddyup" so the wild-card selector `buddyup*` will work fine here.
+### Configuring elasticsearch 
+
+Outside of setting a unique `cluster.name` in the elasticsearch `config/elasticsearch.yml` file
+
+### Configuring Kibana 
+
+Kibana will need to know what index (think database) to look at. I'm prefixing all the indices with "buddyup" so the wild-card selector `buddyup*` will work fine here. Events will be loaded into the index `buddyupevents` and we can load classes into another index `buddyupclasses`.
 
 ![kibana index](kibana_index.png)
 
+### Configuring timelion
 
-## Getting to know the data
+For **timelion** to use the event field `created_at` as its time series index, the Kibana plugin config file will need to be updated.
 
-I exported one class's data and imported it to the ES using a simple bulk create from python (see `write_feed` in [explore.py](explore.py). 
+Set the timelion config in `timelion.json` to match
 
-Starting to do some quick visualizations from Kibana, I was able to see the most common meeting times for a study group.
+```json
+"es": {
+  "timefield": "created_at",
+  "default_index": "buddyupevents",
+  "allow_url_parameter": false
+},
+```
 
-![study_group_start_time.png](study_group_start_time.png)
+![timelion_config.png](timelion_config.png)
+
+Now restart kibana.
+
+## Importing event data
+
+With an export of the events, elasticsearch can ingest the data as follows
+
+```python
+import explore
+explore.create_es('buddyupevents')
+explore.write_event_mapping()
+data = explore.get_data('buddyup-aleck-events-export.json')
+explore.write_feed(data=data, index='buddyupevents')
+```
+
+## Visualizing event data
+
+![timelion.png](timelion.png)
