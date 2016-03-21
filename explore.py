@@ -103,5 +103,4 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     m = Mapping(doc_type)
     m.field('created_at', 'date')
     m.field('data', 'object')
-    m.field()
     m.save(index)
