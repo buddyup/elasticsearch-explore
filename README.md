@@ -85,4 +85,9 @@ Coming to a future near you, build a dashboard in kibana.
 
 ![timelion.png](timelion.png)
 
+
+Getting signups  
+
+    .es('type:signed_up AND data.school_id: "osu_edu"').title("OSU").label("# signups").color('#dc4153').cusum()
+    
 ![account_signups.png](account_signups.png)
