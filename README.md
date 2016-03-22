@@ -89,5 +89,21 @@ Coming to a future near you, build a dashboard in kibana.
 Getting signups  
 
     .es('type:signed_up AND data.school_id: "osu_edu"').title("OSU").label("# signups").color('#dc4153').cusum()
-    
+
 ![account_signups.png](account_signups.png)
+
+## Some stats as reference points
+
+| stat | value | 
+| ---- | ----- |
+| All events to date as event.json | 73MB |
+| Indexed size in elasticsearch | 104MB |
+| Indexing speed | 2,600 docs / sec |
+| Time to index | ~1min
+| Number of events | 168k
+| AVG round-trip query time from js | 140ms |
+
+
+## Stretch Goals 
+
+I think after seeing the data visualized, 
