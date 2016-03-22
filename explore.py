@@ -2,25 +2,27 @@
 
 Usage:
     import explore
-    explore.create_es('buddyupevents')
+    explore.create('buddyupevents')
     explore.write_event_mapping()
     data = explore.get_data('buddyup-aleck-events-export.json')
-    explore.write_feed(data=data, index='buddyupevents')
+    explore.bulk_load_events(data)
+
+TODO:
+    - pass in an elasticsearch instance to all the funcs that create a default one or set the connection from
+    the envorinoment. e.g. create(es, 'buddyupevents') and bulk_load_events(es, data)
+    - set more mappings as 'not_analyzed' meaning the fields won't be tokenized and parsed but still searchable, we
+    don't want ids, first names, etc being tokenized, just messages
 
 """
 
 import json
-import lifter
 from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch.helpers import bulk
-from elasticsearch_dsl import Mapping
+from elasticsearch_dsl import Mapping, Object
 from elasticsearch_dsl.connections import connections
 
 # Define a default Elasticsearch connection
 connections.create_connection(hosts=['localhost'])
-
-Group = lifter.models.Model('Group')
-NewsEvent = lifter.models.Model('NewsEvent')
 
 
 def get_data(filename=None):
@@ -32,43 +34,23 @@ def get_data(filename=None):
     return data
 
 
-def get_groups(data):
-    """Get groups."""
-    return Group.load(data['groups'].values())
-
-
-def get_feed(data):
-    """Get events."""
-    return NewsEvent.load(data['news_feed'].values())
-
-
-_data = get_data()
-groups = get_groups(_data)
-feed = get_feed(_data)
-
-print "feed count", feed.count()
-print "group count", groups.count()
-
-
-def create_es(index='buddyupclass'):
+def create(index='buddyupevents'):
     """Create elastisearch index."""
     es = Elasticsearch()
     es.indices.create(index=index, ignore=400)
 
 
-def drop(index='buddyupclass'):
+def drop(index='buddyupevents'):
     """Drop the Eeasticsearch index."""
     es = Elasticsearch()
     try:
         es.indices.delete(index=index)
     except NotFoundError:
-        print "ES index missing"
+        print("ES index {} missing".format(index))
 
 
-def write_feed(data=None, index='buddyupclass'):
+def bulk_load_feed(data, index='buddyupclass'):
     """Bulk write feed to ES."""
-    if data is None:
-        data = _data
     es = Elasticsearch()
 
     def serializer(data):
@@ -89,20 +71,58 @@ def write_feed(data=None, index='buddyupclass'):
             doc_type='feed',
         )
     else:
-        bulk(
-            es,
-            serializer(data),
-            index=index,
-            doc_type='event',
-        )
+        raise KeyError("Expected news_feed in data")
+
+
+def bulk_load_events(data, index='buddyupevents'):
+    """Bulk loads all events."""
+    es = Elasticsearch()  # TODO in prod seting config for ES cluster
+
+    def serializer(data):
+        for k, v in data.iteritems():
+            v['_id'] = k
+            v['id'] = k
+            if v.get('data', {}).get('params') == '':
+                v['data']['params'] = None
+            # if v.get('data', {}).get('password'):
+                # v['data']['password'] = None
+            yield v
+
+    bulk(
+        es,
+        serializer(data),
+        index=index,
+        doc_type='event',
+    )
 
 
 def write_event_mapping(index='buddyupevents', doc_type='event'):
-    """Write the mapping for an ES index and doc type.
+    """Write the `event` mapping for an ES index and doc type.
 
     http://elasticsearch-dsl.readthedocs.org/en/latest/persistence.html#mappings
     """
     m = Mapping(doc_type)
     m.field('created_at', 'date')
-    m.field('data', 'object')
+    data = Object()
+    data.field('password', 'string', index='no', include_in_all=False, store='no')
+    data.field('first_name', 'string', index='not_analyzed')
+    data.field('last_name', 'string', index='not_analyzed')
+    # data.field('start', 'date')
+    # data.field('end', 'date')
+    m.field('data', data)
+    m.field('first_name', 'string', index='not_analyzed')
+    m.field('last_name', 'string', index='not_analyzed')
+    m.field('id', 'string', index='not_analyzed')
+    m.field('type', 'string', index='not_analyzed')
+    m.field('*start', 'date')
+    m.field('*end', 'date')
     m.save(index)
+
+
+def view_mappings(index='buddyupevents', doc_type='event'):
+    """Return a Mapping of mappings.
+
+    Usage: explore.view_mappings().to_dict()
+    """
+    m = Mapping.from_es(index, doc_type)
+    return m

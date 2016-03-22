@@ -65,10 +65,10 @@ With an export of the events, elasticsearch can ingest the data as follows
 
 ```python
 import explore
-explore.create_es('buddyupevents')
+explore.create('buddyupevents')
 explore.write_event_mapping()
 data = explore.get_data('buddyup-aleck-events-export.json')
-explore.write_feed(data=data, index='buddyupevents')
+explore.bulk_load_events(data)
 ```
 
 ## Visualizing event data
