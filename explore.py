@@ -77,6 +77,8 @@ def write_feed(data=None, index='buddyupclass'):
             v['id'] = k
             if v.get('data', {}).get('params') == '':
                 v['data']['params'] = None
+            if v.get('data', {}).get('password'):
+                v['data']['password'] = None
             yield v
 
     if 'news_feed' in data:
