@@ -61,6 +61,28 @@ Now restart kibana.
 
 ## Importing event data
 
+### Getting an export of events
+
+Since the event data is too large to download from a web browser (77MB) it should be retrieved via the REST API using the auth credentials. *Note for data over 256MB you'll need to concat Firebase support for the data.*
+
+
+```py
+import os
+import json
+import requests
+
+endpoint = os.environ.get('FIREBASE_ENDPOINT')
+key = os.environ.get('FIREBASE_KEY')
+url = "{0}/events/.json?print=pretty&auth={1}".format(endpoint, key) 
+
+resp = requests.get(url)
+data = resp.json()
+with file('events.json', 'w') as f:
+    json.dump(data, f)
+```
+
+### Importing the data into elasticsearch
+
 With an export of the events, elasticsearch can ingest the data as follows
 
 ```python
@@ -98,8 +120,8 @@ Getting signups
 | ---- | ----- |
 | all events to date as a JSON file | 73MB |
 | index size in elasticsearch | 104MB |
-| indexing speed | 2,600 docs / sec |
-| time to index | ~1min
+| indexing speed | 4,500 docs / sec |
+| time to index | <1min
 | number of events | 168k
 | AVG round-trip query time from js | 140ms |
 | Query time in ES | ~50ms |

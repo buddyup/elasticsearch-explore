@@ -84,8 +84,8 @@ def bulk_load_events(data, index='buddyupevents'):
             v['id'] = k
             if v.get('data', {}).get('params') == '':
                 v['data']['params'] = None
-            # if v.get('data', {}).get('password'):
-                # v['data']['password'] = None
+            if v.get('data', {}).get('password'):
+                v['data']['password'] = None
             yield v
 
     bulk(
@@ -102,20 +102,19 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     http://elasticsearch-dsl.readthedocs.org/en/latest/persistence.html#mappings
     """
     m = Mapping(doc_type)
-    m.field('created_at', 'date')
-    data = Object()
-    data.field('password', 'string', index='no', include_in_all=False, store='no')
+    data = Object()  # elasticsearch_dsl field object
+    data.field('password', 'string', index='no', include_in_all=False, store=False)
     data.field('first_name', 'string', index='not_analyzed')
     data.field('last_name', 'string', index='not_analyzed')
-    # data.field('start', 'date')
-    # data.field('end', 'date')
+    data.field('start', 'date')
+    data.field('end', 'date')
     m.field('data', data)
+
+    m.field('created_at', 'date')
     m.field('first_name', 'string', index='not_analyzed')
     m.field('last_name', 'string', index='not_analyzed')
     m.field('id', 'string', index='not_analyzed')
     m.field('type', 'string', index='not_analyzed')
-    m.field('*start', 'date')
-    m.field('*end', 'date')
     m.save(index)
 
 
