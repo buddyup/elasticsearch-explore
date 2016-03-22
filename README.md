@@ -96,11 +96,11 @@ Getting signups
 
 | stat | value | 
 | ---- | ----- |
-| All events to date as event.json | 73MB |
-| Indexed size in elasticsearch | 104MB |
-| Indexing speed | 2,600 docs / sec |
-| Time to index | ~1min
-| Number of events | 168k
+| all events to date as a JSON file | 73MB |
+| index size in elasticsearch | 104MB |
+| indexing speed | 2,600 docs / sec |
+| time to index | ~1min
+| number of events | 168k
 | AVG round-trip query time from js | 140ms |
 
 
