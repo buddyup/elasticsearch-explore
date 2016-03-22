@@ -119,4 +119,29 @@ Take a look at the chart below.
 
 ![buddies.png](buddies.png)
 
-Are users buddying up just to private chat? 
+Are users buddying up just to private chat? What other actions lead to buddying up?
+
+## Technical implementation
+
+How to integrate with the buddy up app.
+
+In general, this will be a two-step approach. One, load from a dump using the Firebase id as the elasticsearch id and _id. Having both ids be the same is critical for syncing and updating. Two, update the events processing where applicable to update the ES cluster(s) for profile and events. This can be very asynch and as long as the serialization between loading the dump and syncing in the app is the same, we'll be just fine.
+
+To be expected, elasticsearch will fail from time to time, normally this is from malformed queries and timeouts. For analytics this isn't a big deal since it's a drop in the bucket, for profile data, we'll want the sync to retry and yell if it fails.
+
+For full text search of user profiles, I suggest creating a small cluster with an index for the profiles and syncing them on updates. We can then expose an endpoint through `api.buddyup.org` which searches by the search and filters by school and/or class.
+
+For analytics, we'll want a small to medium sized cluster, and once we've explored what easy and possible with elasticsearch we can write the queries into API to either update Firebase periodically (i.e. a caching layer) which dashboard and ground control can consume, or expose new api endpoint on `api.buddyup.org` for the analytics. 
+
+We also have the option of exposing elasticsearch and kibana to white-listed ip-addresses for ad hoc querying and visualizations or writing some flexible front-end to back-end code to allow generic charting and querying of data without exposing elasticsearch to the public, which we don't want to do as there are bot-net exploits in the wild.
+
+### Hosted solutions
+
+Everyone I know hosts themselves, but *Found* would be my recommendation. I haven't used any of the ES providers offered on Heroku, like Bonzai, but we can try them. It's fairly strait forward to backup and restore.
+
+
+### Known issues
+
+Keeping two databases in sync is a pain. Know that going in.
+
+
