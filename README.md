@@ -143,6 +143,12 @@ Take a look at the chart below.
 
 Are users buddying up just to private chat? What other actions lead to buddying up?
 
+What's an average student's life-cycle?  
+What are the events that lead to a successful experience?  
+Do we want more stickiness?  
+Are we able to quantify success?  (three to five connections?)  
+Can we plot the number of users that make the third buddy over time?  (how many users have 3-5 buddies?)
+
 ## Technical implementation
 
 How to integrate with the buddy up app.
