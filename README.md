@@ -102,8 +102,19 @@ Getting signups
 | time to index | ~1min
 | number of events | 168k
 | AVG round-trip query time from js | 140ms |
+| Query time in ES | ~50ms |
 
 
-## Stretch Goals 
+## Elasticsearch use case
 
-I think after seeing the data visualized, 
+We'll want to use analytics for dashboard and ground control and text search of profiles by school and by class, potentially with auto-suggest.  These should be two separate indicies and potentially clusters since you cannot have a join in ES anyhow.
+
+We'll want to use elasticsearch as an analytics engine to drive visualizations which show the success of the app and the success of the students using the app. We'll want this to assist and drive sales, and provide dashboard and ground control to new levels of insight into our users' interaction with BuddyUP.
+
+### Stretch Goals
+
+I think after seeing the data visualized over time, particularly private chat, buddy requests and buddy accepts, we'll want to see if relationships exist among interactions. For example, "Do users send private chats after buddying up?", "How many profiles does an average user look at before buddying up?"
+
+Take a look at the chart below.
+
+![buddies.png](buddies.png)
