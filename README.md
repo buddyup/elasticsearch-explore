@@ -149,6 +149,10 @@ Do we want more stickiness?
 Are we able to quantify success?  (three to five connections?)  
 Can we plot the number of users that make the third buddy over time?  (how many users have 3-5 buddies?)
 
+Our most active user over time
+
+![user_over_time.png](user_over_time.png)
+
 ## Technical implementation
 
 How to integrate with the buddy up app.
