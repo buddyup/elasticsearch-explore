@@ -167,6 +167,18 @@ For analytics, we'll want a small to medium sized cluster, and once we've explor
 
 We also have the option of exposing elasticsearch and kibana to white-listed ip-addresses for ad hoc querying and visualizations or writing some flexible front-end to back-end code to allow generic charting and querying of data without exposing elasticsearch to the public, which we don't want to do as there are bot-net exploits in the wild.
 
+#### Milestones (maybe move these into github issues & milestones)
+
+- [ ] find a docker image for elasticsearch
+- [ ] decide on elasticsearch version
+- [ ] integrate with dewey
+- [ ] define elasticsearch goals for app and dashboard/ground control
+- [ ] pick a hosting provider
+- [ ] capacity plan for upcoming year, luckily ES grows horizontally
+- [ ] determine base cluster reqs (normally three master (micro) nodes and two data)
+- [ ] review code needed to sync
+- [ ] find out a way to get user via API without photo
+
 ### Hosted solutions
 
 Everyone I know hosts themselves, but *Found* would be my recommendation. I haven't used any of the ES providers offered on Heroku, like Bonzai, but we can try them. It's fairly strait forward to backup and restore.
