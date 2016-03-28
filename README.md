@@ -160,6 +160,7 @@ Our most active user over time
 
 #### Sentiment Analysis
 ![sentiment_analysis.png](sentiment_analysis.png)
+Notes: [https://realpython.com/blog/python/twitter-sentiment-python-docker-elasticsearch-kibana/](https://realpython.com/blog/python/twitter-sentiment-python-docker-elasticsearch-kibana/)
 
 ## Technical implementation
 
