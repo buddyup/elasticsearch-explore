@@ -153,7 +153,13 @@ Our most active user over time
 
 ![user_over_time.png](user_over_time.png)
 
+
+#### Heatmap
+
 ![heatmap.png](heatmap.png)
+
+#### Sentiment Analysis
+![sentiment_analysis.png](sentiment_analysis.png)
 
 ## Technical implementation
 
@@ -179,9 +185,10 @@ We also have the option of exposing elasticsearch and kibana to white-listed ip-
 - [ ] capacity plan for upcoming year, luckily ES grows horizontally
 - [ ] determine base cluster reqs (normally three master (micro) nodes and two data)
 - [ ] review code needed to sync
-- [ ] find out a way to get user via API without photo (should be able to get this from events)
-- [ ] semantic analysis of chats, real-time insights into trends in classrooms. 
+- [ ] find out a way to get user via API without photo (should be able to get this from events `account_created`, `signed_up`, and `update_profile`)
+- [ ] sentiment analysis of `chat_message`, real-time insights into trends in classrooms. Should be fairly simple to do using `data.body` and some python: [http://text-processing.com/demo/sentiment/](http://text-processing.com/demo/sentiment/)
 - [ ] github-like d3 calendar [heatmap](https://github.com/DKirwan/calendar-heatmap) of a student, class, and colleges/universities
+- [ ] save date time parts for easy querying later: hour, minute, AM/PM, weekday, day of month, day of year, month, year see [https://github.com/alecklandgraf/gardenio/blob/master/sensor_log.py](https://github.com/alecklandgraf/gardenio/blob/master/sensor_log.py)
 
 ### Hosted solutions
 
