@@ -27,6 +27,12 @@ Install marvel into Kibana
 
 If elasticsearch or kibana were running, restart them to see the installs. Preferably elasticsearch first. 
 
+### Python install
+
+```py
+pip install -r requirements.txt
+python -m textblob.download_corpora
+```
 
 ## Configuration
 
@@ -179,6 +185,8 @@ We also have the option of exposing elasticsearch and kibana to white-listed ip-
 #### Milestones (maybe move these into github issues & milestones)
 
 - [ ] find a docker image for elasticsearch
+- [ ] create and use aliases to indicies
+- [ ] for event index, use index by date or month, e.g. `buddyupevents-2016-01`, `buddyupevents-2016-02`, ..., because in ES searching across indicies is totally OK and recommended. Then we can move old indicies to slower nodes in the future. 
 - [ ] decide on elasticsearch version
 - [ ] integrate with dewey
 - [ ] define elasticsearch goals for app and dashboard/ground control

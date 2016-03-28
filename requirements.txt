@@ -16,3 +16,4 @@ six==1.10.0
 traitlets==4.2.1
 urllib3==1.14
 requests==2.9.1
+textblob==0.11.1

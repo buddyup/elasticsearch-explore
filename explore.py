@@ -20,6 +20,7 @@ from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch.helpers import bulk
 from elasticsearch_dsl import Mapping, Object
 from elasticsearch_dsl.connections import connections
+from textblob import TextBlob
 
 # Define a default Elasticsearch connection
 connections.create_connection(hosts=['localhost'])
@@ -86,6 +87,12 @@ def bulk_load_events(data, index='buddyupevents'):
                 v['data']['params'] = None
             if v.get('data', {}).get('password'):
                 v['data']['password'] = None
+            if v.get('type') == 'chat_message' and v.get('data', {}).get('body'):
+                chat = TextBlob(v.get('data', {}).get('body', ''))
+                v['sentiment'] = {
+                    'polarity': chat.sentiment.polarity * 100,
+                    'subjectivity': chat.sentiment.subjectivity * 100,
+                }
             yield v
 
     bulk(
