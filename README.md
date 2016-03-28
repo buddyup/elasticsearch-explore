@@ -153,6 +153,8 @@ Our most active user over time
 
 ![user_over_time.png](user_over_time.png)
 
+![heatmap.png](heatmap.png)
+
 ## Technical implementation
 
 How to integrate with the buddy up app.
@@ -177,7 +179,9 @@ We also have the option of exposing elasticsearch and kibana to white-listed ip-
 - [ ] capacity plan for upcoming year, luckily ES grows horizontally
 - [ ] determine base cluster reqs (normally three master (micro) nodes and two data)
 - [ ] review code needed to sync
-- [ ] find out a way to get user via API without photo
+- [ ] find out a way to get user via API without photo (should be able to get this from events)
+- [ ] semantic analysis of chats, real-time insights into trends in classrooms. 
+- [ ] github-like d3 calendar [heatmap](https://github.com/DKirwan/calendar-heatmap) of a student, class, and colleges/universities
 
 ### Hosted solutions
 
