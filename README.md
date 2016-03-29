@@ -199,6 +199,12 @@ We also have the option of exposing elasticsearch and kibana to white-listed ip-
 - [ ] github-like d3 calendar [heatmap](https://github.com/DKirwan/calendar-heatmap) of a student, class, and colleges/universities
 - [ ] save date time parts for easy querying later: hour, minute, AM/PM, weekday, day of month, day of year, month, year see [https://github.com/alecklandgraf/gardenio/blob/master/sensor_log.py](https://github.com/alecklandgraf/gardenio/blob/master/sensor_log.py)
 
+#### Asks from John
+
+- Would like to get numbers on user drop-off in the onboarding process. Percentage of users who downloaded the app, created a profile, but failed to add a class.
+- Would like to know stats for something like: "35% of users access BuddyUp daily, 32% access more than once a week. Another 16% a few times a month."
+Then we can start to track usage between those cohorts. Trying things that move folks from a couple times a week to everyday.
+
 ### Hosted solutions
 
 Everyone I know hosts themselves, but *Found* would be my recommendation. I haven't used any of the ES providers offered on Heroku, like Bonzai, but we can try them. It's fairly strait forward to backup and restore.
