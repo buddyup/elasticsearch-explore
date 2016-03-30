@@ -2,8 +2,8 @@
 
 ## Download the latest elasticsearch and kibana from the site
 
-Kibana: `kibana-4.4.2-darwin-x64`  
-Elasticsearch: `2.2.1`
+Kibana: `kibana-4.5.0-darwin-x64`  
+Elasticsearch: `2.3.0`
 
 Unpack these `tar xzvf elas*.tar.gz` and `tar zxvf kib*.tar.gz` and edit the elasticsearch config file and set a unique cluser name.
 
@@ -13,17 +13,18 @@ Unpack these `tar xzvf elas*.tar.gz` and `tar zxvf kib*.tar.gz` and edit the ela
 
 Timelion and marvel (now free for prod and dev) are worthwhile. Kibana provides a GUI, timelion makes time base queries simpler, marvel is Elastic's monitoring interface. It will show cluster stats, node stats, etc.
 
-Install timelion  
+Install marvel & graph into ES
 
-    kibana-4.4.2-darwin-x64/bin/kibana plugin -i kibana/timelion
+    elasticsearch-2.3.0/bin/plugin install license
+    elasticsearch-2.3.0/bin/plugin install marvel-agent
+    elasticsearch-2.3.0/bin/plugin install graph
 
-Intall marvel into ES
+Install timelion, sense, graph, and marvel
 
-    elasticsearch-2.2.1/bin/plugin install marvel-agent
-
-Install marvel into Kibana
-
-    kibana-4.4.2-darwin-x64/bin/kibana plugin --install elasticsearch/marvel/latest
+    kibana-4.5.0-darwin-x64/bin/kibana plugin -i kibana/timelion
+    kibana-4.5.0-darwin-x64/bin/kibana plugin --install elastic/sense
+    kibana-4.5.0-darwin-x64/bin/kibana plugin --install elasticsearch/graph/latest
+    kibana-4.5.0-darwin-x64/bin/kibana plugin --install elasticsearch/marvel/latest
 
 If elasticsearch or kibana were running, restart them to see the installs. Preferably elasticsearch first. 
 
