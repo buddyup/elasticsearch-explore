@@ -18,7 +18,7 @@ TODO:
 import json
 from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch.helpers import bulk
-from elasticsearch_dsl import Mapping, Object
+from elasticsearch_dsl import Mapping, Object, Nested
 from elasticsearch_dsl.connections import connections
 from textblob import TextBlob
 
@@ -113,6 +113,20 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     data.field('password', 'string', index='no', include_in_all=False, store=False)
     data.field('first_name', 'string', index='not_analyzed')
     data.field('last_name', 'string', index='not_analyzed')
+    data.field('accepted_by', 'string', index='not_analyzed')
+    data.field('accepted_by_last_name', 'string', index='not_analyzed')
+    data.field('accepted_by_first_name', 'string', index='not_analyzed')
+    data.field('requested_by', 'string', index='not_analyzed')
+    data.field('requested_by_last_name', 'string', index='not_analyzed')
+    data.field('requested_by_first_name', 'string', index='not_analyzed')
+    data.field('recipient', 'string', index='not_analyzed')
+    data.field('recipient_first_name', 'string', index='not_analyzed')
+    data.field('recipient_last_name', 'string', index='not_analyzed')
+    data.field('sender', 'string', index='not_analyzed')
+    data.field('sender_first_name', 'string', index='not_analyzed')
+    data.field('sender_last_name', 'string', index='not_analyzed')
+    data.field('sender_last_name', 'string', index='not_analyzed')
+    data.field('sent_at', 'date')
     data.field('start', 'date')
     data.field('end', 'date')
     m.field('data', data)
@@ -121,6 +135,8 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     m.field('first_name', 'string', index='not_analyzed')
     m.field('last_name', 'string', index='not_analyzed')
     m.field('id', 'string', index='not_analyzed')
+    m.field('creator', 'string', index='not_analyzed')
+    m.field('involved', 'string', index='not_analyzed')
     m.field('type', 'string', index='not_analyzed')
     m.save(index)
 
@@ -132,3 +148,85 @@ def view_mappings(index='buddyupevents', doc_type='event'):
     """
     m = Mapping.from_es(index, doc_type)
     return m
+
+
+def write_user_mapping(index='buddyupusers', doc_type='user'):
+    """Write the `user` mapping for buddy up."""
+    m = Mapping(doc_type)
+
+    public = Object()
+    public.field('first_name', 'string', index='not_analyzed')
+    public.field('last_name', 'string', index='not_analyzed')
+    public.field('signed_up_at', 'date')
+    m.field('public', public)
+
+    groups = Nested()
+    groups.field('creator', 'string', index='not_analyzed')
+    groups.field('group_id', 'string', index='not_analyzed')
+    groups.field('school_id', 'string', index='not_analyzed')
+    groups.field('subject', 'string', index='not_analyzed')
+    groups.field('subject_code', 'string', index='not_analyzed')
+    groups.field('subject_icon', 'string', index='not_analyzed')
+    groups.field('start', 'date')
+    groups.field('end', 'date')
+    m.field('groups', groups)
+
+    private = Object()
+    m.field('private', private)
+
+    internal = Object()
+    m.field('internal', internal)
+
+    schools = Nested()
+    m.field('schools', schools)
+
+    classes = Nested()
+    classes.field('course_id', 'string', index='not_analyzed')
+    classes.field('id', 'string', index='not_analyzed')
+    classes.field('school_id', 'string', index='not_analyzed')
+    classes.field('subject_icon', 'string', index='not_analyzed')
+    m.field('classes', classes)
+
+    buddies = Nested()
+    buddies.field('user_id', 'string', index='not_analyzed')
+    buddies.field('first_name', 'string', index='not_analyzed')
+    buddies.field('last_name', 'string', index='not_analyzed')
+    m.field('buddies', buddies)
+
+    buddies_outgoing = Nested()
+    buddies_outgoing.field('user_id', 'string', index='not_analyzed')
+    m.field('buddies_outgoing', buddies_outgoing)
+
+    m.save(index)
+
+
+def create_users_from_events(events, users_index='buddyupusers'):
+    """Create the Users index."""
+    es = Elasticsearch()
+
+    drop(users_index)
+    create(users_index)
+    write_user_mapping(users_index)
+
+    def serializer(events):
+        for k, v in events.iteritems():
+            v['_id'] = k
+            v['id'] = k
+            v.pop('events', None)
+            v.pop('pictures', None)
+            v['groups'] = v.get('groups', {}).values()
+            v['schools'] = v.get('schools', {}).values()
+            v['classes'] = v.get('classes', {}).values()
+            v['buddies'] = v.get('buddies', {}).values()
+            v['buddies-outgoing'] = [
+                {'user_id': key, 'accepted': val}
+                for key, val in v.get('buddies-outgoing', {}).iteritems()
+            ]
+            yield v
+
+    bulk(
+        es,
+        serializer(events),
+        index=users_index,
+        doc_type='user',
+    )
