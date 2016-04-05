@@ -129,6 +129,12 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     data.field('sent_at', 'date')
     data.field('start', 'date')
     data.field('end', 'date')
+
+    device = Object()
+    device.field('manufacturer', 'string', index='not_analyzed')
+    device.field('model', 'string', index='not_analyzed')
+    device.field('platform', 'string', index='not_analyzed')
+    data.field('device', device)
     m.field('data', data)
 
     m.field('created_at', 'date')
@@ -137,6 +143,7 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     m.field('id', 'string', index='not_analyzed')
     m.field('creator', 'string', index='not_analyzed')
     m.field('involved', 'string', index='not_analyzed')
+    m.field('profile_pic_url_tiny', 'string', index='not_analyzed')
     m.field('type', 'string', index='not_analyzed')
     m.save(index)
 
