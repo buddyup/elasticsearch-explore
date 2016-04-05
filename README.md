@@ -92,6 +92,12 @@ with file('events.json', 'w') as f:
 
 With an export of the events, elasticsearch can ingest the data as follows
 
+```bash
+./reload_events.py buddyup-aleck-events-export.json
+```
+
+#### or
+
 ```python
 import explore
 explore.create('buddyupevents')
