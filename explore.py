@@ -126,6 +126,7 @@ def write_event_mapping(index='buddyupevents', doc_type='event'):
     data.field('sender_first_name', 'string', index='not_analyzed')
     data.field('sender_last_name', 'string', index='not_analyzed')
     data.field('sender_last_name', 'string', index='not_analyzed')
+    data.field('email', 'string', index='not_analyzed')
     data.field('sent_at', 'date')
     data.field('start', 'date')
     data.field('end', 'date')
