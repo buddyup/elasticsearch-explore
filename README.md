@@ -13,18 +13,19 @@ Unpack these `tar xzvf elas*.tar.gz` and `tar zxvf kib*.tar.gz` and edit the ela
 
 Timelion and marvel (now free for prod and dev) are worthwhile. Kibana provides a GUI, timelion makes time base queries simpler, marvel is Elastic's monitoring interface. It will show cluster stats, node stats, etc.
 
-Install marvel & graph into ES
+Install timelion
+
+    kibana-4.5.0-darwin-x64/bin/kibana plugin -i kibana/timelion    
+
+(Optional, requires license after 30 days) Install marvel, sense, and graph 
 
     elasticsearch-2.3.0/bin/plugin install license
     elasticsearch-2.3.0/bin/plugin install marvel-agent
     elasticsearch-2.3.0/bin/plugin install graph
-
-Install timelion, sense, graph, and marvel
-
-    kibana-4.5.0-darwin-x64/bin/kibana plugin -i kibana/timelion
     kibana-4.5.0-darwin-x64/bin/kibana plugin --install elastic/sense
     kibana-4.5.0-darwin-x64/bin/kibana plugin --install elasticsearch/graph/latest
     kibana-4.5.0-darwin-x64/bin/kibana plugin --install elasticsearch/marvel/latest
+
 
 If elasticsearch or kibana were running, restart them to see the installs. Preferably elasticsearch first. 
 
